@@ -22,6 +22,9 @@ while True:
     if GPIO.input(sensor_pin):
         print("Dry")
         GPIO.output(relay_pin, GPIO.HIGH)
+        time.sleep(5)
+        GPIO.output(relay_pin, GPIO.LOW)
+        time.sleep(10)
     else:
         print("Wet")
         GPIO.output(relay_pin, GPIO.LOW)
