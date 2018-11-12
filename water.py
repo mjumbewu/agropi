@@ -12,10 +12,17 @@ GPIO.setmode(GPIO.BOARD)
 sensor_pin = 11
 GPIO.setup(sensor_pin, GPIO.IN)
 
-# Keep an eye on the pin. Report its status.
+# Define the pin that we have our water pump relay connected to. Setup that pin
+# to send output.
+relay_pin = 12
+GPIO.setup(relay_pin, GPIO.OUT)
+
+# Alternate turning the pump on an off.
 while True:
     if GPIO.input(sensor_pin):
         print("Dry")
+        GPIO.output(relay_pin, GPIO.HIGH)
     else:
         print("Wet")
+        GPIO.output(relay_pin, GPIO.LOW)
     time.sleep(1)
