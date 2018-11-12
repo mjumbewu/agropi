@@ -1,0 +1,72 @@
+<!-- Geneated with https://pinetools.com/syntax-highlighter
+     Github Gist style
+-->
+<html>
+  <head>
+  </head>
+
+  <body>
+<pre class="hljs" style="display: block; background: rgb(255, 255, 255); padding: 0.5em; color: rgb(51, 51, 51); overflow-x: auto;"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">import</span> RPi.GPIO <span class="hljs-keyword" style="color: rgb(167, 29, 93);">as</span> GPIO
+<span class="hljs-keyword" style="color: rgb(167, 29, 93);">import</span> relay
+<span class="hljs-keyword" style="color: rgb(167, 29, 93);">import</span> sensor
+<span class="hljs-keyword" style="color: rgb(167, 29, 93);">import</span> time
+
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># Set up the GPIO pin numbering mode. There are basically two ways to refer to</span>
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># each GPIO pin: by Raspberry Pi number scheme (GPIO.BOARD) or by Broadcom</span>
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># numbering scheme (GPIO.BCM). We're going to use the BOARD because it's easier</span>
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># to remember which pin is which.</span>
+GPIO.setmode(GPIO.BOARD)
+
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># Define the pin that we have out moisture sensor connected to. Setup that pin</span>
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># to receive input.</span>
+sensor_pin = <span class="hljs-number">11</span>
+GPIO.setup(sensor_pin, GPIO.IN)
+
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># Define the pin that we have our water pump relay connected to. Setup that pin</span>
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># to send output.</span>
+relay_pin = <span class="hljs-number">12</span>
+GPIO.setup(relay_pin, GPIO.OUT)
+
+<span class="hljs-comment" style="color: rgb(150, 152, 150);">#  Create a function to hold the behavior of pulsing the water pump.</span>
+<span class="hljs-function"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">def</span> <span class="hljs-title" style="color: rgb(121, 93, 163);">pulse</span><span class="hljs-params">(pin, duration)</span>:</span>
+    relay.switch_on(pin)
+    time.sleep(duration)
+    relay.switch_off(pin)
+
+<span class="hljs-comment" style="color: rgb(150, 152, 150);"># Alternate turning the pump on an off.</span>
+<span class="hljs-keyword" style="color: rgb(167, 29, 93);">while</span> <span class="hljs-keyword" style="color: rgb(167, 29, 93);">True</span>:
+    <span class="hljs-keyword" style="color: rgb(167, 29, 93);">if</span> sensor.is_dry(sensor_pin):
+        pulse(pin=relay_pin, duration=<span class="hljs-number">5</span>)
+        time.sleep(<span class="hljs-number">10</span>)
+    time.sleep(<span class="hljs-number">1</span>)
+</pre>
+
+    <b>sensor.py</b>
+<pre class="hljs" style="display: block; background: rgb(255, 255, 255); padding: 0.5em; color: rgb(51, 51, 51); overflow-x: auto;"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">import</span> RPi.GPIO <span class="hljs-keyword" style="color: rgb(167, 29, 93);">as</span> GPIO
+
+
+<span class="hljs-function"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">def</span> <span class="hljs-title" style="color: rgb(121, 93, 163);">is_dry</span><span class="hljs-params">(pin)</span>:</span>
+    sensor_state = GPIO.input(pin)
+    <span class="hljs-keyword" style="color: rgb(167, 29, 93);">if</span> sensor_state == <span class="hljs-number">1</span>:
+        print(<span class="hljs-string" style="color: rgb(223, 80, 0);">"Sensor is dry..."</span>)
+        <span class="hljs-keyword" style="color: rgb(167, 29, 93);">return</span> <span class="hljs-keyword" style="color: rgb(167, 29, 93);">True</span>
+    <span class="hljs-keyword" style="color: rgb(167, 29, 93);">else</span>:
+        print(<span class="hljs-string" style="color: rgb(223, 80, 0);">"Sensor is not dry..."</span>)
+        <span class="hljs-keyword" style="color: rgb(167, 29, 93);">return</span> <span class="hljs-keyword" style="color: rgb(167, 29, 93);">False</span>
+</pre>
+
+    <b>relay.py</b>
+<pre class="hljs" style="display: block; background: rgb(255, 255, 255); padding: 0.5em; color: rgb(51, 51, 51); overflow-x: auto;"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">import</span> RPi.GPIO <span class="hljs-keyword" style="color: rgb(167, 29, 93);">as</span> GPIO
+
+
+<span class="hljs-function"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">def</span> <span class="hljs-title" style="color: rgb(121, 93, 163);">switch_on</span><span class="hljs-params">(pin)</span>:</span>
+    print(<span class="hljs-string" style="color: rgb(223, 80, 0);">"Switching relay on..."</span>)
+    GPIO.output(pin, GPIO.HIGH)
+
+
+<span class="hljs-function"><span class="hljs-keyword" style="color: rgb(167, 29, 93);">def</span> <span class="hljs-title" style="color: rgb(121, 93, 163);">switch_off</span><span class="hljs-params">(pin)</span>:</span>
+    print(<span class="hljs-string" style="color: rgb(223, 80, 0);">"Switching relay off..."</span>)
+    GPIO.output(pin, GPIO.LOW)
+</pre>
+  </body>
+</html>

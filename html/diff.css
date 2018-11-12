@@ -1,0 +1,7 @@
+.add, .remove {
+  display: inline-block;
+  width: 100%;
+}
+
+.add { background-color: #E5FFEC; }
+.remove { background-color: #FFEDF0; }
