@@ -14,5 +14,8 @@ GPIO.setup(sensor_pin, GPIO.IN)
 
 # Keep an eye on the pin. Report its status.
 while True:
-    print(GPIO.input(sensor_pin))
+    if GPIO.input(sensor_pin):
+        print("Dry")
+    else:
+        print("Wet")
     time.sleep(1)
