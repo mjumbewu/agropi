@@ -19,11 +19,15 @@ GPIO.setup(sensor_pin, GPIO.IN)
 relay_pin = 12
 GPIO.setup(relay_pin, GPIO.OUT)
 
+#  Create a function to hold the behavior of pulsing the water pump.
+def pulse(pin, duration):
+    relay.switch_on(pin)
+    time.sleep(duration)
+    relay.switch_off(pin)
+
 # Alternate turning the pump on an off.
 while True:
     if sensor.is_dry(sensor_pin):
-        relay.switch_on(relay_pin)
-        time.sleep(5)
-        relay.switch_off(relay_pin)
+        pulse(pin=relay_pin, duration=5)
         time.sleep(10)
     time.sleep(1)
