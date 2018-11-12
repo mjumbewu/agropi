@@ -1,4 +1,6 @@
 import RPi.GPIO as GPIO
+import relay
+import sensor
 import time
 
 # Set up the GPIO pin numbering mode. There are basically two ways to refer to
@@ -19,10 +21,9 @@ GPIO.setup(relay_pin, GPIO.OUT)
 
 # Alternate turning the pump on an off.
 while True:
-    if GPIO.input(sensor_pin):
-        print("Dry")
-        GPIO.output(relay_pin, GPIO.HIGH)
+    if sensor.is_dry(sensor_pin):
+        relay.switch_on(relay_pin)
         time.sleep(5)
-        GPIO.output(relay_pin, GPIO.LOW)
+        relay.switch_off(relay_pin)
         time.sleep(10)
     time.sleep(1)
