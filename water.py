@@ -25,7 +25,4 @@ while True:
         time.sleep(5)
         GPIO.output(relay_pin, GPIO.LOW)
         time.sleep(10)
-    else:
-        print("Wet")
-        GPIO.output(relay_pin, GPIO.LOW)
     time.sleep(1)
